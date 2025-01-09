@@ -1,10 +1,50 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { UsersComponent } from './users/users.component';
+import { AssignNumberToUserComponent } from './assign-number-to-user/assign-number-to-user.component';
+import { AssignRaffleToClientComponent } from './assign-raffle-to-client/assign-raffle-to-client.component';
+import { ClientsComponent } from './clients/clients.component';
+import { RaffersComponent } from './raffers/raffers.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: '',
+    redirectTo: 'dashboard',
+    pathMatch: 'full',
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+  },
+  {
+    path: 'users',
+    component: UsersComponent,
+  },
+  {
+    path: 'clients',
+    component: ClientsComponent,
+  },
+  {
+    path: 'raffers',
+    component: RaffersComponent,
+  },
+  {
+    path: 'assign-raffle-to-client',
+    component: AssignRaffleToClientComponent,
+  },
+  {
+    path: 'assign-number-to-user',
+    component: AssignNumberToUserComponent,
+  },
+  {
+    path: '**',
+    redirectTo: 'dashboard',
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
