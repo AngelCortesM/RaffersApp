@@ -1,1 +1,45 @@
 <h1>Dashboard</h1>
+
+<!-- Cartas para sorteos asignados a clientes -->
+<div class="card">
+  <div class="card-head">Sorteos Asignados a Clientes</div>
+  <div class="card-body">
+    <div>
+      <h3>Cliente 1</h3>
+      <ul>
+        <li>Sorteo 1 - Tickets: 5</li>
+        <li>Sorteo 2 - Tickets: 10</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-head">Sorteos en los que los Usuarios están Participando</div>
+  <div class="card-body">
+    <div>
+      <h3>Usuario 1</h3>
+      <ul>
+        <li>Sorteo 1 - Tickets: 5</li>
+        <li>Sorteo 2 - Tickets: 10</li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+<!-- Cartas para sorteos en los que los usuarios están participando
+<div class="card">
+  <div class="card-head">
+    Sorteos en los que los Usuarios están Participando
+  </div>
+  <div class="card-body">
+    <div *ngFor="let usuario of usuarios">
+      <h3>{{ usuario.nombre }}</h3>
+      <ul>
+        <li *ngFor="let sorteo of usuario.sorteos">
+          {{ sorteo.nombre }} - Tickets: {{ sorteo.tickets }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div> -->
