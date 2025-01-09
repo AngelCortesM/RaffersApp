@@ -1,4 +1,10 @@
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  HttpClientModule,
+  provideHttpClient,
+  withFetch,
+} from '@angular/common/http';
 import {
   BrowserModule,
   provideClientHydration,
@@ -30,8 +36,17 @@ import { PagesComponent } from './pages/pages.component';
     AssignNumberToUserComponent,
     PagesComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule],
-  providers: [provideClientHydration(withEventReplay())],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+  ],
+  providers: [
+    provideClientHydration(withEventReplay()),
+    provideHttpClient(withFetch()),
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

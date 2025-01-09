@@ -6,6 +6,7 @@
   top: 0;
   width: 5rem;
   height: 100vh;
+  border-radius: 0 0.35rem 0.35rem 0;
   box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
 
   .logo-container {
@@ -24,6 +25,7 @@
       font-weight: 900;
       cursor: pointer;
       border: none;
+      color: #4d2556;
     }
     .logo-text {
       margin-left: 1.5rem;
@@ -87,7 +89,7 @@
   .sidenav-nav-item:hover {
     .sidenav-nav-link {
       background-color: #fff;
-      color: #000;
+      color: #53275d;
     }
   }
 }
@@ -96,6 +98,6 @@
   background-color: #fff;
   .sidenav-link-icon,
   .sidenav-link-text {
-    color: #000;
+    color: #4d2556;
   }
 }
