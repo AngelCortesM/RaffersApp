@@ -17,11 +17,12 @@ import { BodyComponent } from './body/body.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientsComponent } from './clients/clients.component';
-import { RaffersComponent } from './raffers/raffers.component';
+import { RaffersComponent } from './raffles/raffles.component';
 import { UsersComponent } from './users/users.component';
 import { AssignRaffleToClientComponent } from './assign-raffle-to-client/assign-raffle-to-client.component';
 import { AssignNumberToUserComponent } from './assign-number-to-user/assign-number-to-user.component';
 import { PagesComponent } from './pages/pages.component';
+import { ErrorHandlerService } from './core/services/error-handler.service';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { PagesComponent } from './pages/pages.component';
   providers: [
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
+    ErrorHandlerService,
   ],
   bootstrap: [AppComponent],
 })

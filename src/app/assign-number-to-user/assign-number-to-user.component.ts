@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { Client } from '../core/interfaces/client.interface';
 import { User } from '../core/interfaces/user.interface';
-import { Raffle } from '../core/interfaces/raffer.interface';
+import { Raffle } from '../core/interfaces/raffle.interface';
 import { AssignNumberService } from '../core/services/assign-number-service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { catchError, finalize, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import {
+  catchError,
+  finalize,
+  debounceTime,
+  distinctUntilChanged,
+} from 'rxjs/operators';
 import { of } from 'rxjs';
+import e from 'express';
 
 @Component({
   selector: 'app-assign-number-to-user',
@@ -21,9 +27,11 @@ export class AssignNumberToUserComponent implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
   raffles: Raffle[] = [];
+  filteredRaffles: Raffle[] = [];
   assignedNumber: string | null = null;
   error: string | null = null;
   isLoading = false;
+  selectedClientId: number | null = null;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -33,10 +41,11 @@ export class AssignNumberToUserComponent implements OnInit {
       clientId: ['', Validators.required],
       userId: ['', Validators.required],
       raffleId: ['', Validators.required],
+      searchTerm: [''],
     });
 
     this.searchForm = this.fb.group({
-      searchTerm: ['']
+      searchTerm: [''],
     });
   }
 
@@ -47,63 +56,81 @@ export class AssignNumberToUserComponent implements OnInit {
   }
 
   setupSearchListener(): void {
-    this.searchForm.get('searchTerm')?.valueChanges.pipe(
-      debounceTime(300),
-      distinctUntilChanged()
-    ).subscribe(searchTerm => {
-      this.filterUsers(searchTerm);
-    });
+    this.searchForm
+      .get('searchTerm')
+      ?.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
+      .subscribe((searchTerm) => {
+        this.filterUsers(searchTerm);
+      });
   }
 
   loadClients(): void {
     this.isLoading = true;
-    this.assignNumberService.getClients().pipe(
-      catchError(error => {
-        this.error = 'Error al cargar los clientes. Por favor, intente de nuevo.';
-        console.error('Error al cargar los clientes:', error);
-        return of([]);
-      }),
-      finalize(() => this.isLoading = false)
-    ).subscribe((clients: Client[]) => {
-      this.clients = clients;
-    });
+    this.assignNumberService
+      .getClients()
+      .pipe(
+        catchError((error) => {
+          this.error =
+            error.message ||
+            'Error al cargar los clientes. Por favor, intente de nuevo.';
+          return of([]);
+        }),
+        finalize(() => (this.isLoading = false))
+      )
+      .subscribe((clients: Client[]) => {
+        this.clients = clients;
+      });
   }
 
-  loadUsers(clientId: number, searchTerm: string = ''): void {
+  loadUsers(idClient: number, searchTerm: string = ''): void {
     this.isLoading = true;
     this.error = null;
-    this.assignNumberService.getUsersByClientId(clientId, searchTerm).pipe(
-      catchError(error => {
-        this.error = 'Error al cargar los usuarios. Por favor, intente de nuevo.';
-        console.error('Error al cargar los usuarios:', error);
-        return of([]);
-      }),
-      finalize(() => this.isLoading = false)
-    ).subscribe((users: User[]) => {
-      this.users = users;
-      this.filteredUsers = users;
-    });
+    this.assignNumberService
+      .getUsersByClientId(idClient, searchTerm)
+      .pipe(
+        catchError((error) => {
+          this.error =
+            error.message ||
+            'Error al cargar los usuarios. Por favor, intente de nuevo.';
+          return of([]);
+        }),
+        finalize(() => (this.isLoading = false))
+      )
+      .subscribe((users: User[]) => {
+        this.users = users.filter((user) => user.idClient === idClient);
+        this.filteredUsers = this.users;
+      });
   }
 
   loadRaffles(): void {
     this.isLoading = true;
-    this.assignNumberService.getRaffles().pipe(
-      catchError(error => {
-        this.error = 'Error al cargar los sorteos. Por favor, intente de nuevo.';
-        console.error('Error al cargar los sorteos:', error);
-        return of([]);
-      }),
-      finalize(() => this.isLoading = false)
-    ).subscribe((raffles: Raffle[]) => {
-      this.raffles = raffles;
-    });
+    this.assignNumberService
+      .getRaffles()
+      .pipe(
+        catchError((error) => {
+          this.error =
+            error.message ||
+            'Error al cargar los sorteos. Por favor, intente de nuevo.';
+          return of([]);
+        }),
+        finalize(() => (this.isLoading = false))
+      )
+      .subscribe((raffles: Raffle[]) => {
+        this.raffles = raffles.filter(
+          (raffle) => raffle.idClient === this.selectedClientId
+        );
+        this.filteredRaffles = this.raffles;
+      });
   }
 
   onClientChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     const clientId = Number(target.value);
+    this.selectedClientId = clientId;
     this.loadUsers(clientId);
+    this.loadRaffles();
     this.assignForm.patchValue({ userId: '' });
+    this.assignForm.patchValue({ raffleId: '' });
     this.searchForm.patchValue({ searchTerm: '' });
   }
 
@@ -111,7 +138,7 @@ export class AssignNumberToUserComponent implements OnInit {
     if (!searchTerm) {
       this.filteredUsers = this.users;
     } else {
-      this.filteredUsers = this.users.filter(user =>
+      this.filteredUsers = this.users.filter((user) =>
         user.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -121,23 +148,30 @@ export class AssignNumberToUserComponent implements OnInit {
     if (this.assignForm.valid) {
       this.isLoading = true;
       this.error = null;
-      this.assignedNumber = null;
-      this.assignNumberService.assignNumber(this.assignForm.value).pipe(
-        catchError(error => {
-          this.error = 'Error al asignar el número. Por favor, intente de nuevo.';
-          console.error('Error al asignar el número:', error);
-          return of(null);
-        }),
-        finalize(() => this.isLoading = false)
-      ).subscribe(response => {
-        if (response) {
-          this.assignedNumber = response.number;
-          console.log('Número asignado con éxito', response);
-        }
-      });
+      this.assignedNumber = '';
+      this.assignNumberService
+        .assignNumber(this.assignForm.value)
+        .pipe(
+          catchError((error) => {
+            this.error =
+              error.message ||
+              'Error al asignar el número. Por favor, intente de nuevo.';
+
+            return of(null);
+          }),
+          finalize(() => (this.isLoading = false))
+        )
+        .subscribe((response) => {
+          if (response) {
+            this.assignedNumber = this.formatNumber(response.number);
+          }
+        });
     }
   }
 
+  private formatNumber(number: string): string {
+    return number.padStart(5, '0');
+  }
   resetForm(): void {
     this.assignForm.reset();
     this.searchForm.reset();

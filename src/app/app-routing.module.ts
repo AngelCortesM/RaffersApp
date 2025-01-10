@@ -5,7 +5,7 @@ import { UsersComponent } from './users/users.component';
 import { AssignNumberToUserComponent } from './assign-number-to-user/assign-number-to-user.component';
 import { AssignRaffleToClientComponent } from './assign-raffle-to-client/assign-raffle-to-client.component';
 import { ClientsComponent } from './clients/clients.component';
-import { RaffersComponent } from './raffers/raffers.component';
+import { RaffersComponent } from './raffles/raffles.component';
 
 const routes: Routes = [
   {
