@@ -6,12 +6,32 @@
         <label for="clientId">Cliente</label>
         <div class="input-group">
           <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
-          <select id="clientId" formControlName="clientId" (change)="onClientChange($event)" class="form-control" [class.is-invalid]="assignForm.get('clientId')?.invalid && assignForm.get('clientId')?.touched">
+          <select
+            id="clientId"
+            formControlName="clientId"
+            (change)="onClientChange($event)"
+            class="form-control"
+            [class.is-invalid]="
+              assignForm.get('clientId')?.invalid &&
+              assignForm.get('clientId')?.touched
+            "
+          >
             <option value="">Seleccione un cliente</option>
-            <option *ngFor="let client of clients || []" [value]="client.idClient">{{ client.name }}</option>
+            <option
+              *ngFor="let client of clients || []"
+              [value]="client.idClient"
+            >
+              {{ client.name }}
+            </option>
           </select>
         </div>
-        <div class="invalid-feedback" *ngIf="assignForm.get('clientId')?.invalid && assignForm.get('clientId')?.touched">
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            assignForm.get('clientId')?.invalid &&
+            assignForm.get('clientId')?.touched
+          "
+        >
           Por favor, seleccione un cliente.
         </div>
       </div>
@@ -20,7 +40,13 @@
         <label for="searchUser">Buscar Usuario</label>
         <div class="input-group">
           <span class="input-group-text"><i class="fas fa-search"></i></span>
-          <input type="text" id="searchUser" formControlName="searchTerm" class="form-control" placeholder="Buscar un usuario...">
+          <input
+            type="text"
+            id="searchUser"
+            formControlName="searchTerm"
+            class="form-control"
+            placeholder="Buscar un usuario..."
+          />
         </div>
       </div>
 
@@ -28,12 +54,31 @@
         <label for="userId">Usuario</label>
         <div class="input-group">
           <span class="input-group-text"><i class="fas fa-user"></i></span>
-          <select id="userId" formControlName="userId" class="form-control" [class.is-invalid]="assignForm.get('userId')?.invalid && assignForm.get('userId')?.touched">
+          <select
+            id="userId"
+            formControlName="userId"
+            class="form-control"
+            [class.is-invalid]="
+              assignForm.get('userId')?.invalid &&
+              assignForm.get('userId')?.touched
+            "
+          >
             <option value="">Seleccione un usuario</option>
-            <option *ngFor="let user of filteredUsers || []" [value]="user.idUser">{{ user.name }}</option>
+            <option
+              *ngFor="let user of filteredUsers || []"
+              [value]="user.idUser"
+            >
+              {{ user.name }}
+            </option>
           </select>
         </div>
-        <div class="invalid-feedback" *ngIf="assignForm.get('userId')?.invalid && assignForm.get('userId')?.touched">
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            assignForm.get('userId')?.invalid &&
+            assignForm.get('userId')?.touched
+          "
+        >
           Por favor, seleccione un usuario.
         </div>
       </div>
@@ -41,42 +86,82 @@
       <div class="form-group">
         <label for="raffleId">Sorteo</label>
         <div class="input-group">
-          <span class="input-group-text"><i class="fas fa-ticket-alt"></i></span>
-          <select id="raffleId" formControlName="raffleId" class="form-control" [class.is-invalid]="assignForm.get('raffleId')?.invalid && assignForm.get('raffleId')?.touched">
+          <span class="input-group-text"
+            ><i class="fas fa-ticket-alt"></i
+          ></span>
+          <select
+            id="raffleId"
+            formControlName="raffleId"
+            class="form-control"
+            [class.is-invalid]="
+              assignForm.get('raffleId')?.invalid &&
+              assignForm.get('raffleId')?.touched
+            "
+          >
             <option value="">Seleccione un sorteo</option>
-            <option *ngFor="let raffle of raffles || []" [value]="raffle.idRaffle">{{ raffle.name }}</option>
+            <option
+              *ngFor="let raffle of raffles || []"
+              [value]="raffle.idRaffle"
+            >
+              {{ raffle.name }}
+            </option>
           </select>
         </div>
-        <div class="invalid-feedback" *ngIf="assignForm.get('raffleId')?.invalid && assignForm.get('raffleId')?.touched">
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            assignForm.get('raffleId')?.invalid &&
+            assignForm.get('raffleId')?.touched
+          "
+        >
           Por favor, seleccione un sorteo.
         </div>
       </div>
     </div>
 
     <div class="form-group buttons">
-      <button type="submit" class="btn-primary" [disabled]="!assignForm.valid || isLoading">
-        <span *ngIf="isLoading" class="spinner-border" role="status" aria-hidden="true"></span>
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="!assignForm.valid || isLoading"
+      >
+        <output
+          *ngIf="isLoading"
+          class="spinner-border"
+          aria-hidden="true"
+        ></output>
         Asignar Número
       </button>
-      <button type="button" class="btn-secondary" (click)="resetForm()" [disabled]="isLoading">Reiniciar</button>
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="resetForm()"
+        [disabled]="isLoading"
+      >
+        Reiniciar
+      </button>
     </div>
   </form>
 
   <div *ngIf="assignedNumber" class="alert alert-success">
-    <p>Número Asignado: <strong>{{ assignedNumber }}</strong></p>
+    <p>
+      Número Asignado: <strong>{{ assignedNumber }}</strong>
+    </p>
   </div>
   <div *ngIf="error" class="alert alert-danger">
     <p>{{ error }}</p>
   </div>
 
   <div class="filtered-users">
-    <hr>
+    <hr />
     <h3>Usuarios Filtrados</h3>
     <ul class="list-group">
       <li *ngFor="let user of filteredUsers || []" class="list-group-item">
         {{ user.name }}
       </li>
     </ul>
-    <p *ngIf="filteredUsers.length === 0">No se encontraron usuarios que coincidan con los criterios de búsqueda.</p>
+    <p *ngIf="filteredUsers.length === 0">
+      No se encontraron usuarios que coincidan con los criterios de búsqueda.
+    </p>
   </div>
 </div>

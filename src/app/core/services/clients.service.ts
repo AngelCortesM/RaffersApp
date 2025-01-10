@@ -11,16 +11,16 @@ import { ErrorHandlerService } from './error-handler.service';
 export class ClientService {
   private readonly apiUrl = environment.apiUrl;
 
-  constructor(private readonly http: HttpClient, private errorHandler: ErrorHandlerService) {}
+  constructor(private readonly http: HttpClient, private readonly errorHandler: ErrorHandlerService) {}
 
-  createClient(client: Partial<Client>): Observable<Client> {
-    return this.http.post<Client>(this.apiUrl + '/Client', client).pipe(
+  createClient(client: Partial<Client>): Observable<{ success: boolean; message: string }> {
+    return this.http.post<{ success: boolean; message: string }>(this.apiUrl + '/Client', client).pipe(
       catchError((error: HttpErrorResponse) => this.errorHandler.handleError(error))
     );
   }
 
-  getClients(): Observable<Client[]> {
-    return this.http.get<Client[]>(this.apiUrl + '/Client/list').pipe(
+  getClients(): Observable<{ success: boolean; data: Client[] }> {
+    return this.http.get<{ success: boolean; data: Client[] }>(this.apiUrl + '/Client/list').pipe(
       catchError((error: HttpErrorResponse) => this.errorHandler.handleError(error))
     );
   }

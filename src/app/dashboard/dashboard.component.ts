@@ -46,39 +46,43 @@ export class DashboardComponent implements OnInit {
   }
 
   loadClients(): void {
-    this.clientService.getClients().subscribe(
-      (clients: Client[]) => {
-        this.clients = clients;
-        this.updateClientRafflesChart();
+    this.clientService.getClients().subscribe({
+      next: (response: { success: boolean; data: Client[] }) => {
+        if (response.success) {
+          this.clients = response.data;
+          this.updateClientRafflesChart();
+        }
       },
-      (error) => {
+      error: (error) => {
         this.error = error.message;
       }
-    );
+    });
   }
 
   loadUsers(): void {
-    this.userService.getUsers().subscribe(
-      (users: User[]) => {
-        this.users = users;
+    this.userService.getUsers().subscribe({
+      next: (users: { success: boolean; data: User[] }) => {
+        if (users.success) {
+          this.users = users.data;
+        }
         this.updateUserRafflesChart();
         this.updateUserNumbersChart();
       },
-      (error) => {
+      error: (error) => {
         this.error = error.message;
       }
-    );
+    });
   }
 
   loadRaffles(): void {
-    this.raffleService.getRaffles().subscribe(
-      (raffles: Raffle[]) => {
-        this.raffles = raffles;
+    this.raffleService.getRaffles().subscribe({
+      next: (raffles: { success: boolean; data: Raffle[] }) => {
+        this.raffles = raffles.data;
       },
-      (error) => {
+      error: (error) => {
         this.error = error.message;
       }
-    );
+    });
   }
 
   updateUserRafflesChart(): void {

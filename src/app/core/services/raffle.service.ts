@@ -12,17 +12,33 @@ import { ErrorHandlerService } from './error-handler.service';
 export class RaffleService {
   private readonly apiUrl = environment.apiUrl;
 
-  constructor(private readonly http: HttpClient, private readonly errorHandler: ErrorHandlerService) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly errorHandler: ErrorHandlerService
+  ) {}
 
-  createRaffle(raffle: Partial<Raffle>): Observable<Raffle> {
-    return this.http.post<Raffle>(this.apiUrl + '/Raffle', raffle).pipe(
-      catchError((error: HttpErrorResponse) => this.errorHandler.handleError(error))
-    );
+  createRaffle(
+    raffle: Partial<Raffle>
+  ): Observable<{ success: boolean; message: string }> {
+    return this.http
+      .post<{ success: boolean; message: string }>(
+        this.apiUrl + '/Raffle',
+        raffle
+      )
+      .pipe(
+        catchError((error: HttpErrorResponse) =>
+          this.errorHandler.handleError(error)
+        )
+      );
   }
 
-  getRaffles(): Observable<Raffle[]> {
-    return this.http.get<Raffle[]>(this.apiUrl + '/Raffle').pipe(
-      catchError((error: HttpErrorResponse) => this.errorHandler.handleError(error))
-    );
+  getRaffles(): Observable<{ success: boolean; data: Raffle[] }> {
+    return this.http
+      .get<{ success: boolean; data: Raffle[] }>(this.apiUrl + '/Raffle')
+      .pipe(
+        catchError((error: HttpErrorResponse) =>
+          this.errorHandler.handleError(error)
+        )
+      );
   }
 }

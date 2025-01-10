@@ -7,22 +7,35 @@ import { environment } from '../../../environments/environment';
 import { ErrorHandlerService } from './error-handler.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private readonly apiUrl = environment.apiUrl;
 
-  constructor(private readonly http: HttpClient, private readonly errorHandler: ErrorHandlerService) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly errorHandler: ErrorHandlerService
+  ) {}
 
-  createUser(user: Partial<User>): Observable<User> {
-    return this.http.post<User>(this.apiUrl + '/User', user).pipe(
-      catchError((error: HttpErrorResponse) => this.errorHandler.handleError(error))
-    );
+  createUser(
+    user: Partial<User>
+  ): Observable<{ success: boolean; message: string }> {
+    return this.http
+      .post<{ success: boolean; message: string }>(this.apiUrl + '/User', user)
+      .pipe(
+        catchError((error: HttpErrorResponse) =>
+          this.errorHandler.handleError(error)
+        )
+      );
   }
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl + '/User/list').pipe(
-      catchError((error: HttpErrorResponse) => this.errorHandler.handleError(error))
-    );
+  getUsers(): Observable<{ success: boolean; data: User[] }> {
+    return this.http
+      .get<{ success: boolean; data: User[] }>(this.apiUrl + '/User/list')
+      .pipe(
+        catchError((error: HttpErrorResponse) =>
+          this.errorHandler.handleError(error)
+        )
+      );
   }
 }

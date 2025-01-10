@@ -101,3 +101,30 @@
     color: #4d2556;
   }
 }
+
+@media (max-width: 768px) {
+  .sidenav {
+    width: 100%;
+    height: auto;
+    position: sticky;
+    border-radius: 0;
+    .logo-container {
+      display: none;
+    }
+    .sidenav-nav {
+      flex-direction: row;
+      justify-content: space-around;
+      height: auto;
+      .sidenav-nav-item {
+        margin-bottom: 0;
+        margin-left: 0.5rem;
+        .sidenav-nav-link {
+          justify-content: center;
+          .sidenav-link-text {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
