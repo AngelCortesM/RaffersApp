@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Client } from '../interfaces/client.interface';
@@ -14,7 +14,7 @@ import { ErrorHandlerService } from './error-handler.service';
 export class AssignNumberService {
   private readonly apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient, private errorHandler: ErrorHandlerService) {}
+  constructor(private readonly http: HttpClient, private readonly errorHandler: ErrorHandlerService) {}
 
   getClients(): Observable<Client[]> {
     return this.http

@@ -17,12 +17,16 @@ import { BodyComponent } from './body/body.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ClientsComponent } from './clients/clients.component';
-import { RaffersComponent } from './raffles/raffles.component';
+import { NgChartsModule } from 'ng2-charts';
 import { UsersComponent } from './users/users.component';
 import { AssignRaffleToClientComponent } from './assign-raffle-to-client/assign-raffle-to-client.component';
 import { AssignNumberToUserComponent } from './assign-number-to-user/assign-number-to-user.component';
 import { PagesComponent } from './pages/pages.component';
 import { ErrorHandlerService } from './core/services/error-handler.service';
+import { RafflesComponent } from './raffles/raffles.component';
+import { ClientService } from './core/services/clients.service';
+import { UserService } from './core/services/user.service';
+import { RaffleService } from './core/services/raffle.service';
 
 @NgModule({
   declarations: [
@@ -31,7 +35,7 @@ import { ErrorHandlerService } from './core/services/error-handler.service';
     SidenavComponent,
     DashboardComponent,
     ClientsComponent,
-    RaffersComponent,
+    RafflesComponent,
     UsersComponent,
     AssignRaffleToClientComponent,
     AssignNumberToUserComponent,
@@ -43,11 +47,15 @@ import { ErrorHandlerService } from './core/services/error-handler.service';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NgChartsModule,
   ],
   providers: [
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
     ErrorHandlerService,
+    ClientService,
+    UserService,
+    RaffleService,
   ],
   bootstrap: [AppComponent],
 })

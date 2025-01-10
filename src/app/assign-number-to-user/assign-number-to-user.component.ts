@@ -11,7 +11,6 @@ import {
   distinctUntilChanged,
 } from 'rxjs/operators';
 import { of } from 'rxjs';
-import e from 'express';
 
 @Component({
   selector: 'app-assign-number-to-user',
@@ -22,7 +21,7 @@ import e from 'express';
 })
 export class AssignNumberToUserComponent implements OnInit {
   assignForm: FormGroup;
-  searchForm: FormGroup;
+
   clients: Client[] = [];
   users: User[] = [];
   filteredUsers: User[] = [];
@@ -43,10 +42,6 @@ export class AssignNumberToUserComponent implements OnInit {
       raffleId: ['', Validators.required],
       searchTerm: [''],
     });
-
-    this.searchForm = this.fb.group({
-      searchTerm: [''],
-    });
   }
 
   ngOnInit(): void {
@@ -56,7 +51,7 @@ export class AssignNumberToUserComponent implements OnInit {
   }
 
   setupSearchListener(): void {
-    this.searchForm
+    this.assignForm
       .get('searchTerm')
       ?.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((searchTerm) => {
@@ -131,7 +126,7 @@ export class AssignNumberToUserComponent implements OnInit {
     this.loadRaffles();
     this.assignForm.patchValue({ userId: '' });
     this.assignForm.patchValue({ raffleId: '' });
-    this.searchForm.patchValue({ searchTerm: '' });
+    this.assignForm.patchValue({ searchTerm: '' });
   }
 
   filterUsers(searchTerm: string): void {
@@ -174,7 +169,7 @@ export class AssignNumberToUserComponent implements OnInit {
   }
   resetForm(): void {
     this.assignForm.reset();
-    this.searchForm.reset();
+
     this.users = [];
     this.filteredUsers = [];
     this.assignedNumber = null;

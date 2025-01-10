@@ -1,6 +1,6 @@
 .body {
   width: calc(100% - 5rem);
-  height: 100vh;
+  height: auto;
   margin-left: 5rem;
   z-index: 0;
   position: relative;
@@ -16,4 +16,21 @@
 .body-md-screen {
   width: calc(100% - 5rem);
   margin-left: 5rem;
+}
+
+@media (max-width: 768px) {
+  .body {
+    width: 100%;
+    padding: 1rem;
+    margin-left: 0;
+    height: auto;
+  }
+  .body-trimmed {
+    width: 100%;
+    margin-left: 0;
+  }
+  .body-md-screen {
+    width: 100%;
+    margin-left: 0;
+  }
 }
