@@ -1,0 +1,127 @@
+<div class="container_1">
+  <h2>Dashboard</h2>
+
+  <div *ngIf="error" class="alert alert-danger">
+    <p>{{ error }}</p>
+  </div>
+
+  <ng-container *ngIf="isMobile; else desktopView">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3>Cantidad de números asignados por usuario</h3>
+        </div>
+        <div class="card-body">
+          <canvas *ngIf="isBrowser" baseChart
+                  [data]="userNumbersData"
+                  [labels]="userNumbersLabels"
+                  [type]="userNumbersType">
+          </canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3>Sorteos por cliente</h3>
+        </div>
+        <div class="card-body">
+          <canvas *ngIf="isBrowser" baseChart
+                  [data]="clientRafflesData"
+                  [labels]="clientRafflesLabels"
+                  [type]="clientRafflesType">
+          </canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3>Usuarios con más sorteos acumulados</h3>
+        </div>
+        <div class="card-body">
+          <canvas *ngIf="isBrowser" baseChart
+                  [data]="userRafflesData"
+                  [labels]="userRafflesLabels"
+                  [type]="userRafflesType">
+          </canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h3>Clientes con más sorteos asociados</h3>
+        </div>
+        <div class="card-body">
+          <canvas *ngIf="isBrowser" baseChart
+                  [data]="clientAssignmentsData"
+                  [labels]="clientAssignmentsLabels"
+                  [type]="clientAssignmentsType">
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #desktopView>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3>Cantidad de números asignados por usuario</h3>
+          </div>
+          <div class="card-body">
+            <canvas *ngIf="isBrowser" baseChart
+                    [data]="userNumbersData"
+                    [labels]="userNumbersLabels"
+                    [type]="userNumbersType">
+            </canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3>Sorteos por cliente</h3>
+          </div>
+          <div class="card-body">
+            <canvas *ngIf="isBrowser" baseChart
+                    [data]="clientRafflesData"
+                    [labels]="clientRafflesLabels"
+                    [type]="clientRafflesType">
+            </canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3>Usuarios con más sorteos acumulados</h3>
+          </div>
+          <div class="card-body">
+            <canvas *ngIf="isBrowser" baseChart
+                    [data]="userRafflesData"
+                    [labels]="userRafflesLabels"
+                    [type]="userRafflesType">
+            </canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3>Clientes con más sorteos asociados</h3>
+          </div>
+          <div class="card-body">
+            <canvas *ngIf="isBrowser" baseChart
+                    [data]="clientAssignmentsData"
+                    [labels]="clientAssignmentsLabels"
+                    [type]="clientAssignmentsType">
+            </canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

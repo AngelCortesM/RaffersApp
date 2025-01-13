@@ -1,0 +1,180 @@
+<div class="container_1">
+  <h2>Asignar Sorteo a un Cliente</h2>
+  <form [formGroup]="assignForm" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="idClient">Cliente</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
+          <select
+            id="idClient"
+            formControlName="idClient"
+            class="form-control"
+            [class.is-invalid]="
+              assignForm.get('idClient')?.invalid &&
+              assignForm.get('idClient')?.touched
+            "
+          >
+            <option value="">Seleccione un cliente</option>
+            <option *ngFor="let client of clients" [value]="client.idClient">
+              {{ client.name }}
+            </option>
+          </select>
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            assignForm.get('idClient')?.invalid &&
+            assignForm.get('idClient')?.touched
+          "
+        >
+          Por favor, seleccione un cliente.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="idRaffle">Sorteo</label>
+        <div class="input-group">
+          <span class="input-group-text"
+            ><i class="fas fa-ticket-alt"></i
+          ></span>
+          <select
+            id="idRaffle"
+            formControlName="idRaffle"
+            class="form-control"
+            [class.is-invalid]="
+              assignForm.get('idRaffle')?.invalid &&
+              assignForm.get('idRaffle')?.touched
+            "
+          >
+            <option value="">Seleccione un sorteo</option>
+            <option *ngFor="let raffle of raffles" [value]="raffle.idRaffle">
+              {{ raffle.name }}
+            </option>
+          </select>
+        </div>
+        <div
+          class="invalid-feedback"
+          *ngIf="
+            assignForm.get('idRaffle')?.invalid &&
+            assignForm.get('idRaffle')?.touched
+          "
+        >
+          Por favor, seleccione un sorteo.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="isActive">Activo</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="fas fa-check"></i></span>
+          <select id="isActive" formControlName="isActive" class="form-control">
+            <option [value]="true">Sí</option>
+            <option [value]="false">No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group buttons">
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="!assignForm.valid || isLoading"
+      >
+        <output
+          *ngIf="isLoading"
+          class="spinner-border"
+          aria-hidden="true"
+        ></output>
+        Asignar Sorteo
+      </button>
+      <button
+        type="button"
+        class="btn-secondary"
+        (click)="assignForm.reset()"
+        [disabled]="isLoading"
+      >
+        Reiniciar
+      </button>
+    </div>
+  </form>
+
+  <div *ngIf="success" class="alert alert-success">
+    <p>{{ success }}</p>
+  </div>
+  <div *ngIf="error" class="alert alert-danger">
+    <p>{{ error }}</p>
+  </div>
+
+  <br />
+  <hr />
+  <h2>Asignaciones de Sorteos</h2>
+  <div class="filtered-users">
+    <form [formGroup]="searchForm">
+      <input
+        type="text"
+        formControlName="search"
+        placeholder="Buscar..."
+        class="form-control mb-3"
+      />
+    </form>
+    <div *ngIf="isMobile; else desktopView" class="filtered-assignments">
+      <ul class="list-group">
+        <li
+          *ngFor="let assignment of filteredAssignments"
+          class="list-group-item"
+        >
+          <div>
+            <strong
+              >{{ assignment.clientName }} (ID:
+              {{ assignment.idClient }})</strong
+            >
+            <p>
+              Sorteo: {{ assignment.raffleName }} (ID:
+              {{ assignment.idRaffle }})
+            </p>
+            <p>Creado: {{ assignment.createdAt | date }}</p>
+            <p>Actualizado: {{ assignment.updatedAt | date }}</p>
+            <p>Activo: {{ assignment.isActive ? "Sí" : "No" }}</p>
+          </div>
+        </li>
+      </ul>
+      <p *ngIf="filteredAssignments.length === 0" class="mt-3">
+        No se encontraron asignaciones de sorteos para los criterios
+        seleccionados.
+      </p>
+    </div>
+
+    <ng-template #desktopView>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th (click)="setSortColumn('clientName')" (keydown)="setSortColumn('clientName')">Cliente</th>
+            <th (click)="setSortColumn('idClient')" (keydown)="setSortColumn('idClient')">ID Cliente</th>
+            <th (click)="setSortColumn('raffleName')" (keydown)="setSortColumn('raffleName')">Sorteo</th>
+            <th (click)="setSortColumn('idRaffle')" (keydown)="setSortColumn('idRaffle')">ID Sorteo</th>
+            <th (click)="setSortColumn('createdAt')" (keydown)="setSortColumn('createdAt')">Creado</th>
+            <th (click)="setSortColumn('updatedAt')" (keydown)="setSortColumn('updatedAt')">Actualizado</th>
+            <th (click)="setSortColumn('isActive')" (keydown)="setSortColumn('isActive')">Activo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let assignment of filteredAssignments">
+            <td>{{ assignment.clientName }}</td>
+            <td>{{ assignment.idClient }}</td>
+            <td>{{ assignment.raffleName }}</td>
+            <td>{{ assignment.idRaffle }}</td>
+            <td>{{ assignment.createdAt | date }}</td>
+            <td>{{ assignment.updatedAt | date }}</td>
+            <td>{{ assignment.isActive ? "Sí" : "No" }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="filteredAssignments.length === 0" class="mt-3">
+        No se encontraron asignaciones de sorteos para los criterios
+        seleccionados.
+      </p>
+    </ng-template>
+  </div>
+</div>

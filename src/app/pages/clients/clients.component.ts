@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Client } from '../core/interfaces/client.interface';
-import { ErrorHandlerService } from '../core/services/error-handler.service';
-import { ClientService } from '../core/services/clients.service';
-import { DeviceService } from '../core/services/device.service';
+import { Client } from '../../core/interfaces/client.interface';
+import { ErrorHandlerService } from '../../core/services/error-handler.service';
+import { ClientService } from '../../core/services/clients.service';
+import { DeviceService } from '../../core/services/device.service';
 
 @Component({
   selector: 'app-clients',

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
-import { Raffle } from '../core/interfaces/raffle.interface';
-import { RaffleService } from '../core/services/raffle.service';
-import { DeviceService } from '../core/services/device.service';
+import { Raffle } from '../../core/interfaces/raffle.interface';
+import { RaffleService } from '../../core/services/raffle.service';
+import { DeviceService } from '../../core/services/device.service';
 
 @Component({
   selector: 'app-raffles',
@@ -70,8 +69,14 @@ export class RafflesComponent implements OnInit {
 
   loadRaffles(): void {
     this.raffleService.getRaffles().subscribe({
-      next: (raffles: { success: boolean; data: Raffle[] }) => {
-        this.raffles = raffles.data;
+      next: (response: { success: boolean; data: Raffle[] }) => {
+        if (response.success) {
+          const uniqueRaffles = new Map<number, Raffle>();
+          response.data.forEach((raffle: Raffle) => {
+            uniqueRaffles.set(raffle.idRaffle, raffle);
+          });
+          this.raffles = Array.from(uniqueRaffles.values());
+        }
       },
       error: (error) => {
         this.error = error.message;

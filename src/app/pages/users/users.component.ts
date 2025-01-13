@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Client } from '../core/interfaces/client.interface';
-import { User } from '../core/interfaces/user.interface';
-import { ErrorHandlerService } from '../core/services/error-handler.service';
-import { ClientService } from '../core/services/clients.service';
-import { UserService } from '../core/services/user.service';
-import { DeviceService } from '../core/services/device.service';
+import { Client } from '../../core/interfaces/client.interface';
+import { User } from '../../core/interfaces/user.interface';
+import { ErrorHandlerService } from '../../core/services/error-handler.service';
+import { ClientService } from '../../core/services/clients.service';
+import { UserService } from '../../core/services/user.service';
+import { DeviceService } from '../../core/services/device.service';
 
 @Component({
   selector: 'app-users',
@@ -60,6 +60,8 @@ export class UsersComponent implements OnInit {
           } else {
             this.error = response.message;
             this.success = null;
+            this.resetForm();
+            this.loadUsers();
           }
         },
         error: (error) => {
