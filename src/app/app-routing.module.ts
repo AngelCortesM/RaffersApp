@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { UsersComponent } from './pages/users/users.component';
 import { AssignNumberToUserComponent } from './pages/assign-number-to-user/assign-number-to-user.component';
-import { AssignRaffleToClientComponent } from './pages/users/assign-raffle-to-client/assign-raffle-to-client.component';
+import { AssignRaffleToClientComponent } from './pages/assign-raffle-to-client/assign-raffle-to-client.component';
 import { ClientsComponent } from './pages/clients/clients.component';
 import { RafflesComponent } from './pages/raffles/raffles.component';
 
