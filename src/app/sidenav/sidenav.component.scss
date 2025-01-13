@@ -1,5 +1,6 @@
+@use "../../styles/variables" as vars;
 .sidenav {
-  background: #663671;
+  background: vars.$primary-color;
   transition: all 0.5s ease;
   position: fixed;
   z-index: 1;
@@ -7,7 +8,7 @@
   width: 5rem;
   height: 100vh;
   border-radius: 0 0.35rem 0.35rem 0;
-  box-shadow: 0.063rem 0 1.25rem 0 #8690a3;
+  box-shadow: 0.063rem 0 1.25rem 0 vars.$box-shadow-color;
 
   .logo-container {
     display: flex;
@@ -15,7 +16,7 @@
     padding: 0.938rem 0.938rem 0 0.938rem;
     width: 100%;
     .logo {
-      background: #fff;
+      background: vars.$background-color;
       text-align: center;
       width: 3rem;
       min-width: 3rem;
@@ -31,7 +32,7 @@
       margin-left: 1.5rem;
       font-size: 24px;
       font-weight: 700;
-      color: #fff;
+      color: vars.$background-color;
     }
     .btn-close {
       margin-left: auto;
@@ -42,7 +43,7 @@
       background-color: transparent;
       border: none;
       .fa-times {
-        color: #fff;
+        color: vars.$background-color;
         font-size: 24px;
       }
     }
@@ -88,14 +89,14 @@
   }
   .sidenav-nav-item:hover {
     .sidenav-nav-link {
-      background-color: #fff;
-      color: #53275d;
+      background-color: vars.$background-color;
+      color: vars.$secondary-color;
     }
   }
 }
 
 .active {
-  background-color: #fff;
+  background-color: vars.$background-color;
   .sidenav-link-icon,
   .sidenav-link-text {
     color: #4d2556;

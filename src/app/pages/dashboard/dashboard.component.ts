@@ -1,12 +1,12 @@
 import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ChartData, ChartType } from 'chart.js';
-import { Client } from '../core/interfaces/client.interface';
-import { User } from '../core/interfaces/user.interface';
-import { Raffle } from '../core/interfaces/raffle.interface';
-import { DeviceService } from '../core/services/device.service';
-import { RaffleByClient } from '../core/interfaces/rafleByClient.interface';
-import { DashboardService } from '../core/services/dashboard.service';
+import { Client } from '../../core/interfaces/client.interface';
+import { User } from '../../core/interfaces/user.interface';
+import { Raffle } from '../../core/interfaces/raffle.interface';
+import { DeviceService } from '../../core/services/device.service';
+import { RaffleByClient } from '../../core/interfaces/rafleByClient.interface';
+import { DashboardService } from '../../core/services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',

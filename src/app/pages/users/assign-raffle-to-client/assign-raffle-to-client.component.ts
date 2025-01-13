@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RaffleAssignmentService } from '../core/services/raffle-assignment.service';
-import { ClientService } from '../core/services/clients.service';
-import { RaffleService } from '../core/services/raffle.service';
-import { Client } from '../core/interfaces/client.interface';
-import { Raffle } from '../core/interfaces/raffle.interface';
-import { DeviceService } from '../core/services/device.service';
-import { RaffleByClient } from '../core/interfaces/rafleByClient.interface';
+import { RaffleAssignmentService } from '../../../core/services/raffle-assignment.service';
+import { ClientService } from '../../../core/services/clients.service';
+import { RaffleService } from '../../../core/services/raffle.service';
+import { Client } from '../../../core/interfaces/client.interface';
+import { Raffle } from '../../../core/interfaces/raffle.interface';
+import { DeviceService } from '../../../core/services/device.service';
+import { RaffleByClient } from '../../../core/interfaces/rafleByClient.interface';
 
 @Component({
   selector: 'assign-raffle-to-client',

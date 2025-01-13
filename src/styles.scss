@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+@use "styles/variables" as vars;
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap");
 
 * {
@@ -16,7 +16,7 @@ body {
   display: flex;
   flex-direction: column;
   border-radius: 0.5rem;
-  background-color: #fff;
+  background-color: vars.$background-color;
   margin: 1.25rem 0 1.25rem 0;
   box-shadow: 0 0.25rem 0.5rem #e6edef;
   .card-head {
@@ -31,7 +31,7 @@ body {
 }
 
 .container_1 {
-  background: #fff;
+  background: vars.$background-color;
   border-radius: 0.45rem;
   box-shadow: 0.063rem 0 1.25rem 0 rgba(134, 144, 163, 0.5);
   padding: 2rem;
@@ -40,18 +40,23 @@ body {
 }
 
 h2 {
-  color: #663671;
+  color: vars.$primary-color;
   font-weight: 700;
   margin-bottom: 1rem;
   font-size: 1.8rem;
 }
+h3 {
+  color: vars.$primary-color;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
 strong {
-  color: #663671;
+  color: vars.$primary-color;
   font-weight: 700;
   font-size: 1.125rem;
 }
 p {
-  color: #8690a3;
+  color: vars.$text-color;
   font-size: 1rem;
 }
 .form-row {
@@ -68,7 +73,7 @@ p {
 
 label {
   display: block;
-  color: #663671;
+  color: vars.$primary-color;
   font-weight: 600;
   margin-bottom: 0.3rem;
   font-size: 1.125rem;
@@ -80,9 +85,9 @@ label {
 }
 
 .input-group-text {
-  background-color: #663671;
-  border: 1px solid #ced4da;
-  color: #ffffff;
+  background-color: vars.$primary-color;
+  border: 1px solid vars.$border-color;
+  color: vars.$background-color;
   border-radius: 0.45rem;
   padding: 0.75rem;
   display: flex;
@@ -96,7 +101,7 @@ label {
 .form-control {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ced4da;
+  border: 1px solid vars.$border-color;
   border-radius: 0.45rem;
   transition: border-color 0.3s, box-shadow 0.3s;
   font-size: 1rem;
@@ -107,7 +112,7 @@ label {
 }
 
 .form-control:focus {
-  border-color: #663671;
+  border-color: vars.$primary-color;
   box-shadow: 0 0 0 0.2rem rgba(102, 54, 113, 0.25);
 }
 
@@ -129,10 +134,10 @@ label {
   transition: all 0.3s ease;
   cursor: pointer;
   border: none;
-  background-color: #663671;
-  color: #fff;
+  background-color: vars.$primary-color;
+  color: vars.$background-color;
   &:hover {
-    background-color: #53275d;
+    background-color: vars.$secondary-color;
     box-shadow: 0 0 0 0.2rem rgba(181, 67, 206, 0.466);
   }
 }
@@ -145,7 +150,7 @@ label {
   cursor: pointer;
   border: none;
   background-color: #6c757d;
-  color: #fff;
+  color: vars.$background-color;
   &:hover {
     background-color: #5a6268;
     box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.466);
@@ -165,15 +170,15 @@ ul {
 }
 
 .alert-success {
-  background-color: #d4edda;
-  border-color: #c3e6cb;
-  color: #155724;
+  background-color: vars.$alert-success-bg;
+  border-color: vars.$alert-success-border;
+  color: vars.$alert-success-text;
 }
 
 .alert-danger {
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-  color: #721c24;
+  background-color: vars.$alert-danger-bg;
+  border-color: vars.$alert-danger-border;
+  color: vars.$alert-danger-text;
 }
 
 .list-group-item {
@@ -193,7 +198,7 @@ ul {
 }
 
 .spinner-border {
-  color: #fff;
+  color: vars.$background-color;
 }
 
 .mt-3 {
@@ -203,8 +208,6 @@ ul {
 .me-2 {
   margin-right: 0.5rem;
 }
-
-
 
 .filtered-users {
   margin-top: 2rem;
@@ -219,7 +222,7 @@ ul {
   overflow: hidden;
   th,
   td {
-    font-size: .9rem;
+    font-size: 0.9rem;
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #edf1f7;
@@ -227,7 +230,7 @@ ul {
 
   th {
     background-color: #f2f2f2;
-    color: #663671;
+    color: vars.$primary-color;
     font-weight: 600;
   }
 
@@ -300,6 +303,9 @@ ul {
   }
   h2 {
     font-size: 0.888rem;
+  }
+  h3 {
+    font-size: 0.777rem;
   }
   strong {
     font-size: 0.888rem;

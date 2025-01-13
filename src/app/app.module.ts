@@ -15,15 +15,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BodyComponent } from './body/body.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { ClientsComponent } from './clients/clients.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { ClientsComponent } from './pages/clients/clients.component';
 import { NgChartsModule } from 'ng2-charts';
-import { UsersComponent } from './users/users.component';
-import { AssignRaffleToClientComponent } from './assign-raffle-to-client/assign-raffle-to-client.component';
-import { AssignNumberToUserComponent } from './assign-number-to-user/assign-number-to-user.component';
-import { PagesComponent } from './pages/pages.component';
+import { UsersComponent } from './pages/users/users.component';
+import { AssignRaffleToClientComponent } from './pages/users/assign-raffle-to-client/assign-raffle-to-client.component';
+import { AssignNumberToUserComponent } from './pages/assign-number-to-user/assign-number-to-user.component';
 import { ErrorHandlerService } from './core/services/error-handler.service';
-import { RafflesComponent } from './raffles/raffles.component';
+import { RafflesComponent } from './pages/raffles/raffles.component';
 import { ClientService } from './core/services/clients.service';
 import { UserService } from './core/services/user.service';
 import { RaffleService } from './core/services/raffle.service';
@@ -39,7 +38,6 @@ import { RaffleService } from './core/services/raffle.service';
     UsersComponent,
     AssignRaffleToClientComponent,
     AssignNumberToUserComponent,
-    PagesComponent,
   ],
   imports: [
     BrowserModule,
