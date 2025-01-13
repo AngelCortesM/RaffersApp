@@ -6,6 +6,7 @@ import { RaffleService } from '../core/services/raffle.service';
 import { Client } from '../core/interfaces/client.interface';
 import { Raffle } from '../core/interfaces/raffle.interface';
 import { DeviceService } from '../core/services/device.service';
+import { RaffleByClient } from '../core/interfaces/rafleByClient.interface';
 
 @Component({
   selector: 'assign-raffle-to-client',
@@ -15,12 +16,17 @@ import { DeviceService } from '../core/services/device.service';
 })
 export class AssignRaffleToClientComponent implements OnInit {
   assignForm!: FormGroup;
+  searchForm!: FormGroup;
   clients: Client[] = [];
   raffles: Raffle[] = [];
+  assignments: RaffleByClient[] = [];
+  filteredAssignments: RaffleByClient[] = [];
   error: string | null = null;
   success: string | null = null;
   isLoading = false;
   isMobile = false;
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(
     private readonly fb: FormBuilder,
@@ -37,10 +43,18 @@ export class AssignRaffleToClientComponent implements OnInit {
       isActive: [true, Validators.required],
     });
 
+    this.searchForm = this.fb.group({
+      search: [''],
+    });
+
     this.loadClients();
     this.loadRaffles();
+    this.loadAssignments();
     this.deviceService.isMobile$.subscribe((isMobile) => {
       this.isMobile = isMobile;
+    });
+    this.searchForm.get('search')?.valueChanges.subscribe((value) => {
+      this.filterAssignments(value);
     });
   }
 
@@ -58,6 +72,7 @@ export class AssignRaffleToClientComponent implements OnInit {
           if (response.success) {
             this.success = response.message;
             this.error = null;
+            this.loadAssignments();
           } else {
             this.error = response.message;
             this.success = null;
@@ -97,13 +112,11 @@ export class AssignRaffleToClientComponent implements OnInit {
     this.raffleService.getRaffles().subscribe({
       next: (response: { success: boolean; data: Raffle[] }) => {
         if (response.success) {
-          const existingRaffles = new Set(this.raffles.map((r) => r.idRaffle));
-
-          const uniqueRaffles = response.data.filter(
-            (r) => !existingRaffles.has(r.idRaffle)
-          );
-
-          this.raffles = [...this.raffles, ...uniqueRaffles];
+          const uniqueRaffles = new Map<number, Raffle>();
+          response.data.forEach((raffle) => {
+            uniqueRaffles.set(raffle.idRaffle, raffle);
+          });
+          this.raffles = Array.from(uniqueRaffles.values());
         } else {
           this.error = 'Error al cargar los sorteos.';
         }
@@ -112,6 +125,53 @@ export class AssignRaffleToClientComponent implements OnInit {
         this.error = error.message;
       },
     });
+  }
+
+  loadAssignments(): void {
+    this.raffleAssignmentService.getRaffleAssignments().subscribe({
+      next: (data: RaffleByClient[]) => {
+        this.assignments = data;
+        this.filteredAssignments = this.assignments;
+        this.sortAssignments();
+      },
+      error: (error) => {
+        this.error = error.message;
+      },
+    });
+  }
+
+  filterAssignments(search: string): void {
+    this.filteredAssignments = this.assignments.filter(
+      (assignment) =>
+        assignment.clientName.toLowerCase().includes(search.toLowerCase()) ||
+        assignment.raffleName.toLowerCase().includes(search.toLowerCase()) ||
+        assignment.idClient.toString().includes(search) ||
+        assignment.idRaffle.toString().includes(search)
+    );
+    this.sortAssignments();
+  }
+  sortAssignments(): void {
+    const sortedAssignments = [...this.filteredAssignments].sort((a, b) => {
+      const compareA = a[this.sortColumn as keyof RaffleByClient];
+      const compareB = b[this.sortColumn as keyof RaffleByClient];
+      if (compareA < compareB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+      if (compareA > compareB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+    this.filteredAssignments = sortedAssignments;
+  }
+  setSortColumn(column: string): void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.sortAssignments();
   }
 
   getClientName(idClient: number): string {

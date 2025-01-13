@@ -33,13 +33,17 @@ export class RaffleAssignmentService {
       );
   }
 
-  getRaffleAssignments(clientId: number, raffleId: number): Observable<any[]> {
-    let params = new HttpParams()
-      .set('idClient', clientId.toString())
-      .set('idRaffle', raffleId.toString());
+  getRaffleAssignments(idClient?: number, idRaffle?: number): Observable<RaffleByClient[]> {
+    let params = new HttpParams();
+    if (idClient) {
+      params = params.set('idClient', idClient.toString());
+    }
+    if (idRaffle) {
+      params = params.set('idRaffle', idRaffle.toString());
+    }
 
     return this.http
-      .get<{ success: boolean; data: any[] }>(
+      .get<{ success: boolean; data: RaffleByClient[] }>(
         `${this.apiUrl}/RaffleAssignment/list`,
         { params }
       )
@@ -48,5 +52,4 @@ export class RaffleAssignmentService {
         catchError(this.errorHandler.handleError)
       );
   }
-
 }

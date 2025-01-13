@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { ChartData, ChartType } from 'chart.js';
 import { Client } from '../core/interfaces/client.interface';
 import { User } from '../core/interfaces/user.interface';
 import { Raffle } from '../core/interfaces/raffle.interface';
-import { ErrorHandlerService } from '../core/services/error-handler.service';
-import { ClientService } from '../core/services/clients.service';
-import { UserService } from '../core/services/user.service';
-import { RaffleService } from '../core/services/raffle.service';
+import { DeviceService } from '../core/services/device.service';
+import { RaffleByClient } from '../core/interfaces/rafleByClient.interface';
+import { DashboardService } from '../core/services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +18,11 @@ export class DashboardComponent implements OnInit {
   clients: Client[] = [];
   users: User[] = [];
   raffles: Raffle[] = [];
+  raffleAssignments: RaffleByClient[] = [];
+  assignedNumbers: any[] = [];
   error: string | null = null;
+  isMobile = false;
+  isBrowser = false;
 
   userRafflesData: ChartData<'bar'> = { datasets: [] };
   userRafflesLabels: string[] = [];
@@ -32,106 +36,169 @@ export class DashboardComponent implements OnInit {
   clientRafflesLabels: string[] = [];
   clientRafflesType: ChartType = 'doughnut';
 
+  clientAssignmentsData: ChartData<'bar'> = { datasets: [] };
+  clientAssignmentsLabels: string[] = [];
+  clientAssignmentsType: ChartType = 'bar';
+
   constructor(
-    private readonly clientService: ClientService,
-    private readonly userService: UserService,
-    private readonly raffleService: RaffleService,
-    private readonly errorHandler: ErrorHandlerService
-  ) {}
+    private readonly dashboardService: DashboardService,
+    private readonly deviceService: DeviceService,
+    @Inject(PLATFORM_ID) private readonly platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit(): void {
-    this.loadClients();
-    this.loadUsers();
-    this.loadRaffles();
+    if (this.isBrowser) {
+      this.loadDashboardData();
+      this.deviceService.isMobile$.subscribe((isMobile) => {
+        this.isMobile = isMobile;
+      });
+    }
   }
 
-  loadClients(): void {
-    this.clientService.getClients().subscribe({
-      next: (response: { success: boolean; data: Client[] }) => {
-        if (response.success) {
-          this.clients = response.data;
-          this.updateClientRafflesChart();
-        }
-      },
-      error: (error) => {
-        this.error = error.message;
-      }
-    });
+  loadDashboardData(): void {
+    if (this.isBrowser) {
+      this.dashboardService.getDashboardData().subscribe({
+        next: (data) => {
+          this.clients = data.clients;
+          this.users = data.users;
+          this.raffles = data.raffles;
+          this.raffleAssignments = data.raffleAssignments;
+          this.assignedNumbers = data.assignedNumbers;
+          this.updateCharts();
+        },
+        error: (error) => {
+          this.error = error.message;
+        },
+      });
+    }
   }
 
-  loadUsers(): void {
-    this.userService.getUsers().subscribe({
-      next: (users: { success: boolean; data: User[] }) => {
-        if (users.success) {
-          this.users = users.data;
-        }
-        this.updateUserRafflesChart();
-        this.updateUserNumbersChart();
-      },
-      error: (error) => {
-        this.error = error.message;
-      }
-    });
-  }
-
-  loadRaffles(): void {
-    this.raffleService.getRaffles().subscribe({
-      next: (raffles: { success: boolean; data: Raffle[] }) => {
-        this.raffles = raffles.data;
-      },
-      error: (error) => {
-        this.error = error.message;
-      }
-    });
+  updateCharts(): void {
+    if (this.isBrowser) {
+      this.updateUserRafflesChart();
+      this.updateUserNumbersChart();
+      this.updateClientRafflesChart();
+      this.updateClientAssignmentsChart();
+    }
   }
 
   updateUserRafflesChart(): void {
-    const userRafflesCount = this.users.map((user) => ({
-      name: user.name,
-      raffles: this.raffles.filter(
-        (raffle) => raffle.idClient === user.idClient
-      ).length,
-    }));
+    const userRafflesCount = this.assignedNumbers
+      .reduce((acc, number) => {
+        const user = acc.find(
+          (u: { name: string; raffles: number }) => u.name === number.userName
+        );
+        if (user) {
+          user.raffles += 1;
+        } else {
+          acc.push({ name: number.userName, raffles: 1 });
+        }
+        return acc;
+      }, [])
+      .filter((user: { name: string; raffles: number }) => user.raffles > 0);
 
-    this.userRafflesLabels = userRafflesCount.map((ur) => ur.name);
+    this.userRafflesLabels = userRafflesCount.map(
+      (ur: { name: string; raffles: number }) => ur.name
+    );
     this.userRafflesData = {
       labels: this.userRafflesLabels,
       datasets: [
         {
-          data: userRafflesCount.map((ur) => ur.raffles),
+          data: userRafflesCount.map(
+            (ur: { name: string; raffles: number }) => ur.raffles
+          ),
           label: 'Sorteos Acumulados',
+          backgroundColor: [
+            '#FFB6C1',
+            '#ADD8E6',
+            '#FFD700',
+            '#90EE90',
+            '#DDA0DD',
+            '#FFA07A',
+            '#E6E6FA',
+            '#B0E0E6',
+            '#FF69B4',
+            '#98FB98',
+            '#AFEEEE',
+            '#DB7093',
+          ],
+          borderColor: '#1E88E5',
+          borderWidth: 1,
         },
       ],
     };
   }
 
   updateUserNumbersChart(): void {
-    const userNumbersCount = this.users.map((user) => ({
-      name: user.name,
-      numbers: this.raffles
-        .filter((raffle) => raffle.idClient === user.idClient)
-        .reduce((acc, raffle) => acc + (raffle.isActive ? 1 : 0), 0),
-    }));
+    const userNumbersCount = this.assignedNumbers
+      .reduce((acc, number) => {
+        const user = acc.find(
+          (u: { name: string; numbers: number }) => u.name === number.userName
+        );
+        if (user) {
+          user.numbers += 1;
+        } else {
+          acc.push({ name: number.userName, numbers: 1 });
+        }
+        return acc;
+      }, [])
+      .filter((user: { name: string; numbers: number }) => user.numbers > 0);
 
-    this.userNumbersLabels = userNumbersCount.map((un) => un.name);
+    this.userNumbersLabels = userNumbersCount.map(
+      (un: { name: string; numbers: number }) => un.name
+    );
     this.userNumbersData = {
       labels: this.userNumbersLabels,
       datasets: [
         {
-          data: userNumbersCount.map((un) => un.numbers),
+          data: userNumbersCount.map(
+            (un: { name: string; numbers: number }) => un.numbers
+          ),
           label: 'Números Asignados',
+          backgroundColor: [
+            '#FFB6C1',
+            '#ADD8E6',
+            '#FFD700',
+            '#90EE90',
+            '#DDA0DD',
+            '#FFA07A',
+            '#E6E6FA',
+            '#B0E0E6',
+            '#FF69B4',
+            '#98FB98',
+            '#AFEEEE',
+            '#DB7093',
+          ],
+          hoverBackgroundColor: [
+            '#FFB6C1',
+            '#ADD8E6',
+            '#FFD700',
+            '#90EE90',
+            '#DDA0DD',
+            '#FFA07A',
+            '#E6E6FA',
+            '#B0E0E6',
+            '#FF69B4',
+            '#98FB98',
+            '#AFEEEE',
+            '#DB7093',
+          ],
         },
       ],
     };
   }
 
   updateClientRafflesChart(): void {
-    const clientRafflesCount = this.clients.map((client) => ({
-      name: client.name,
-      raffles: this.raffles.filter(
-        (raffle) => raffle.idClient === client.idClient
-      ).length,
-    }));
+    const clientRafflesCount = this.clients
+      .map((client) => ({
+        name: client.name,
+        raffles: this.raffleAssignments.filter(
+          (assignment) => assignment.idClient === client.idClient
+        ).length,
+      }))
+      .filter((client) => client.raffles > 0);
 
     this.clientRafflesLabels = clientRafflesCount.map((cr) => cr.name);
     this.clientRafflesData = {
@@ -140,6 +207,72 @@ export class DashboardComponent implements OnInit {
         {
           data: clientRafflesCount.map((cr) => cr.raffles),
           label: 'Sorteos por Cliente',
+          backgroundColor: [
+            '#FFB6C1',
+            '#ADD8E6',
+            '#FFD700',
+            '#90EE90',
+            '#DDA0DD',
+            '#FFA07A',
+            '#E6E6FA',
+            '#B0E0E6',
+            '#FF69B4',
+            '#98FB98',
+            '#AFEEEE',
+            '#DB7093',
+          ],
+          hoverBackgroundColor: [
+            '#FFB6C1',
+            '#ADD8E6',
+            '#FFD700',
+            '#90EE90',
+            '#DDA0DD',
+            '#FFA07A',
+            '#E6E6FA',
+            '#B0E0E6',
+            '#FF69B4',
+            '#98FB98',
+            '#AFEEEE',
+            '#DB7093',
+          ],
+        },
+      ],
+    };
+  }
+
+  updateClientAssignmentsChart(): void {
+    const clientAssignmentsCount = this.clients
+      .map((client) => ({
+        name: client.name,
+        assignments: this.raffleAssignments.filter(
+          (assignment) => assignment.idClient === client.idClient
+        ).length,
+      }))
+      .filter((client) => client.assignments > 0);
+
+    this.clientAssignmentsLabels = clientAssignmentsCount.map((ca) => ca.name);
+    this.clientAssignmentsData = {
+      labels: this.clientAssignmentsLabels,
+      datasets: [
+        {
+          data: clientAssignmentsCount.map((ca) => ca.assignments),
+          label: 'Asignaciones por Cliente',
+          backgroundColor: [
+            '#FFB6C1',
+            '#ADD8E6',
+            '#FFD700',
+            '#90EE90',
+            '#DDA0DD',
+            '#FFA07A',
+            '#E6E6FA',
+            '#B0E0E6',
+            '#FF69B4',
+            '#98FB98',
+            '#AFEEEE',
+            '#DB7093',
+          ],
+          borderColor: '#1E88E5',
+          borderWidth: 1,
         },
       ],
     };

@@ -60,6 +60,8 @@ export class UsersComponent implements OnInit {
           } else {
             this.error = response.message;
             this.success = null;
+            this.resetForm();
+            this.loadUsers();
           }
         },
         error: (error) => {
