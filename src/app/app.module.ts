@@ -1,10 +1,6 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import {
-  HttpClientModule,
-  provideHttpClient,
-  withFetch,
-} from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import {
   BrowserModule,
   provideClientHydration,
@@ -44,12 +40,13 @@ import { RaffleService } from './core/services/raffle.service';
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    HttpClientModule,
+
     NgChartsModule,
   ],
   providers: [
     provideClientHydration(withEventReplay()),
     provideHttpClient(withFetch()),
+    provideHttpClient(),
     ErrorHandlerService,
     ClientService,
     UserService,

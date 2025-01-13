@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 import { Raffle } from '../../core/interfaces/raffle.interface';
 import { RaffleService } from '../../core/services/raffle.service';
 import { DeviceService } from '../../core/services/device.service';
-import { response } from 'express';
 
 @Component({
   selector: 'app-raffles',
