@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Client } from '../../core/interfaces/client.interface';
-import { User } from '../../core/interfaces/user.interface';
-import { Raffle } from '../../core/interfaces/raffle.interface';
-import { AssignNumberService } from '../../core/services/assign-number-service';
+import { Client } from '../../core/interfaces/clients/client.interface';
+import { User } from '../../core/interfaces/users/user.interface';
+import { Raffle } from '../../core/interfaces/raffles/raffle.interface';
+import { AssignNumberService } from '../../core/services/assign-number/assign-number.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   catchError,

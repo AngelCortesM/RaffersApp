@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Raffle } from '../interfaces/raffle.interface';
-import { environment } from '../../../environments/environment';
-import { ErrorHandlerService } from './error-handler.service';
+import { Raffle } from '../../interfaces/raffles/raffle.interface';
+import { environment } from '../../../../environments/environment';
+import { ErrorHandlerService } from '../../../shared/services/error-handler.service';
 
 @Injectable({
   providedIn: 'root',

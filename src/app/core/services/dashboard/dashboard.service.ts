@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Client } from '../interfaces/client.interface';
-import { User } from '../interfaces/user.interface';
-import { Raffle } from '../interfaces/raffle.interface';
-import { environment } from '../../../environments/environment';
-import { ErrorHandlerService } from './error-handler.service';
-import { RaffleByClient } from '../interfaces/rafleByClient.interface';
+import { Client } from '../../interfaces/clients/client.interface';
+import { User } from '../../interfaces/users/user.interface';
+import { Raffle } from '../../interfaces/raffles/raffle.interface';
+import { environment } from '../../../../environments/environment';
+import { ErrorHandlerService } from '../../../shared/services/error-handler.service';
+import { RaffleByClient } from '../../interfaces/raffles/rafleByClient.interface';
 
 @Injectable({
   providedIn: 'root',
