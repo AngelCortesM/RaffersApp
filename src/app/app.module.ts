@@ -9,7 +9,7 @@ import {
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BodyComponent } from './layout/body/body.component';
+
 import { SidenavComponent } from './layout/sidenav/sidenav.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ClientsComponent } from './pages/clients/clients.component';
@@ -22,6 +22,7 @@ import { RafflesComponent } from './pages/raffles/raffles.component';
 import { ClientService } from './core/services/clients/clients.service';
 import { UserService } from './core/services/users/user.service';
 import { RaffleService } from './core/services/raffles/raffle.service';
+import { BodyComponent } from './body/body.component';
 
 @NgModule({
   declarations: [
