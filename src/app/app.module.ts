@@ -22,7 +22,8 @@ import { RafflesComponent } from './pages/raffles/raffles.component';
 import { ClientService } from './core/services/clients/clients.service';
 import { UserService } from './core/services/users/user.service';
 import { RaffleService } from './core/services/raffles/raffle.service';
-import { BodyComponent } from './body/body.component';
+import { BodyComponent } from './layout/body/body.component';
+
 
 @NgModule({
   declarations: [
